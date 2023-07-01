@@ -2,6 +2,10 @@
 .godeps
 .DS_Store
 .vscode
+!.vscode/launch.json
 build/*
 vendor/github.com
 vendor/gopkg.in
+
+data/
+

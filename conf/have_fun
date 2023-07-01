@@ -1,0 +1,30 @@
+## local run
+```shell
+# 1. run etcd v3.4.18 with --enable-v2=true
+
+# 2. run pd
+go run apps/placedriver/main.go --config conf/pd.conf
+
+# 3. run kv node
+CGO_CFLAGS="-I/Users/wuyong/project/c++/rocksdb/include" CGO_LDFLAGS="-L/Users/wuyong/project/c++/rocksdb -lrocksdb -lstdc++ -lm -lsnappy -ljemalloc" go run apps/zankv/main.go --config conf/node1.conf
+CGO_CFLAGS="-I/Users/wuyong/project/c++/rocksdb/include" CGO_LDFLAGS="-L/Users/wuyong/project/c++/rocksdb -lrocksdb -lstdc++ -lm -lsnappy -ljemalloc" go run apps/zankv/main.go --config conf/node2.conf
+CGO_CFLAGS="-I/Users/wuyong/project/c++/rocksdb/include" CGO_LDFLAGS="-L/Users/wuyong/project/c++/rocksdb -lrocksdb -lstdc++ -lm -lsnappy -ljemalloc" go run apps/zankv/main.go --config conf/node3.conf
+```
+
+## curl http api
+```shell
+# pd http api
+curl -X GET '127.0.0.1:18001/datanodes'
+curl -X GET '127.0.0.1:18001/listpd'
+
+curl -X GET '127.0.0.1:18001/namespaces' 
+curl -X POST '127.0.0.1:18001/cluster/namespace/create?namespace=test_p4&partition_num=4&replicator=3'
+curl -X GET '127.0.0.1:18001/query/test_p4'
+curl -X GET '127.0.0.1:18001/namespaces' 
+curl -X DELETE '127.0.0.1:18001/cluster/namespace/delete?namespace=test_p4&partition=**'
+curl -X GET '127.0.0.1:18001/query/test_p4'
+curl -X GET '127.0.0.1:18001/namespaces' 
+
+# kv node http api
+
+```
